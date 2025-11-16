@@ -1,106 +1,133 @@
 #include<iostream>
 using namespace std;
-class Dequeue{
+class Deque {
     private:
+        int *arr;
         int front;
         int rear;
-        int *arr;
         int size;
         int len;
     public:
-        Dequeue(int len){
-            this->len = len;
+        Deque(int size) {
+            this->size = size;
+            arr = new int[size];
             front = rear = -1;
-            size = 0;
-            arr = new int[len];
+            len = 0;
         }
+
+        // push front 
+        void push_front(int value) {
+            if(isFull()) {
+                cout << "Queue is full" << endl;
+                return;
+            }
+            if(front == -1)
+                front = rear = 0; 
+            else if(front == 0 && rear != size - 1)
+                front = size - 1;
+            else
+                front--;
+            arr[front] = value;
+            len++;
+        }
+
+        // push back element
         void push_back(int value){
-                if(isFull()){
-                cout<<"Queue is full.\n";
+            if(isFull()) {
+                cout << "Queue is full" << endl;
                 return;
             }
-            if(isEmpty()){
-                front = 0;
-            }
-            rear++;
-            arr[rear] = value;
-            size++;
-        }
-        void push_front(int value){
-            if(isFull()){
-                cout<<"Queue is full.\n";
-                return;
-            }
-            if(isEmpty()){
+
+            if(front == -1)
                 front = rear = 0;
-                arr[front] = value;
-                size = 1;
-                return;
-            }
-
-            // shift existing elements to the right
-            for(int i = size - 1; i >= 0; i--){
-                arr[i + 1] = arr[i];
-            }
-
-            arr[0] = value;
-            size++;
-            rear = size - 1;  // ✔ correct
-            front = 0;        // ✔ correct
+            else if(rear == size - 1 && front != 0)
+                rear = 0;
+            else
+                rear++;
+            arr[rear] = value;
+            len++;
         }
 
-        void pop_back(){
-            if(isEmpty()){
-                cout<<"Empty Queue.\n";
+        // pop front 
+        void pop_front() {
+            if (front == -1) {
+                cout << "Queue is empty" << endl;
                 return;
             }
-            rear--;
-            
-            if(front > rear){
+
+            if (front == rear)// single element
                 front = rear = -1;
-                size = 0;
-                return;
-            }
-            size--;
-        }
-        void pop_front(){
-            if(isEmpty()){
-                cout << "Empty Queue.\n";
-                return;
-            }
-            // shift elements left
-            for(int i = 0; i < size - 1; i++){
-                arr[i] = arr[i + 1];
-            }
-            size--;
-        }
-        int getFront(){
-            if(!isEmpty())
-                return arr[front];
-            return -1;
+            else if(front == size - 1)
+                front = 0;
+            else 
+            front++;
+            len--;
         }
 
-        int getLength(){
-            return size;
+        // pop back 
+        void pop_back() {
+            if (front == -1) {
+                cout << "Queue is empty" << endl;
+                return;
+            }
+            if(front == rear)// single element
+                front = rear = -1;
+            else if(rear == 0)
+                rear = size - 1;
+            else
+                rear--;
+            len--;
         }
-        bool isEmpty(){
+
+        // get front 
+        int get_front() {
+            if (front == -1) {
+                cout << "Queue is empty" << endl;
+                return -1;
+            }
+            return arr[front];
+        }
+
+        // get rear element
+        int get_back() {
+            if (front == -1) {
+                cout << "Queue is empty" << endl;
+                return -1;
+            }
+            return arr[rear];
+        }
+
+        //  empty ha ?
+        bool isEmpty() {
             return front == -1;
         }
 
-        bool isFull(){
-            return size == len;
+        // full ha ?
+        bool isFull() {
+            if ((front == 0 && rear == size - 1) || ((rear + 1) % size == front)) {
+            return true;
+            }
+            return false;
         }
 
+        int getLength(){
+            if(isEmpty()){
+                cout<<"Empty ha queue.\n";
+                return 0;
+            }
+            return len;
+        }
 };
-void print(Dequeue q){
+
+void print(Deque q){
     while(!q.isEmpty()){
-        cout<<q.getFront()<<"  ";
+        cout<<q.get_front()<<"  ";
         q.pop_front();
     }
     cout<<endl;
 }
 int main(){
-    Dequeue dq(5);
+    Deque dq(5);
     int choice, value;
 
     while(true){
