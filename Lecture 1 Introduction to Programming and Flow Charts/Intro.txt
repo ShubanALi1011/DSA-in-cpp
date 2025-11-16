@@ -1,0 +1,12 @@
+1- Learn about Problem
+
+2- How to Solve a problem ?
+     -> Understand
+     -> Check Given Values
+     -> Approach
+     -> Program
+
+3- Learn about Flow Charts and create FlowCharts
+
+4- Learn about Condition and Looping 
+
